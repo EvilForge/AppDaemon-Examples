@@ -1,4 +1,4 @@
-#Notes:
+# Notes:
 
 AppDaemon was installed in my case using a hassio plugin (automated) install, where you get it from the store and install it
 easily. Your install may be different, so read the docs! 
