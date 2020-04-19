@@ -1,0 +1,169 @@
+---
+# Lighting Related
+Outside Night Lights:
+  module: outsidelights
+  class: NightLight
+  off_scene: scene.landscape_off
+  on_scene: scene.landscape_on
+  timers: Porch Motion Lights
+Porch Motion Lights:
+  module: outsidelights
+  class: OutsideMotion
+  constrain_end_time: sunrise - 00:05:00
+  constrain_input_boolean: input_boolean.night_outside_motion
+  constrain_start_time: sunset + 00:00:01
+  entity_off: scene.porch_off
+  entity_on: scene.porch_on
+  sensor: binary_sensor.fp_sensorpir_switch1
+  delay: 300
+Kitchen Motion Lights:
+  module: insidelights
+  class: InsideMotion
+  constrain_input_boolean: input_boolean.kitchen_motion
+  entity_off: scene.kitchen_ambient_off
+  entity_on: scene.kitchen_ambient_on
+  sensor: switch.k_sensor
+  delay: 300
+Idle Closet Light:
+  module: insidelights
+  class: IdleLight
+  entity_watched:
+    - entity: switch.mb_closet
+  delay: 600
+
+  # Humidity Related
+MasterB Humidity:
+  module: humidity
+  class: HumidifierControl
+  constrain_input_boolean: input_boolean.mb_closed
+  humidity_entity: switch.mb_humidifier
+  sensor: sensor.mb_smartfan_si7021_humidity
+  high_limit: input_number.highhumidity
+  low_limit: input_number.lowhumidity
+LivingR Humidity:
+  module: humidity
+  class: HumidifierControl
+  constrain_input_boolean: input_boolean.living_closed
+  humidity_entity: switch.lr_humidifier
+  sensor: sensor.lr_sensor_dht11_humidity
+  high_limit: input_number.highhumidity
+  low_limit: input_number.lowhumidity
+Den Humidity:
+  module: humidity
+  class: HumidifierControl
+  constrain_input_boolean: input_boolean.den_closed
+  humidity_entity: switch.d_humidifier
+  sensor: sensor.k_sensor_si7021_humidity
+  high_limit: input_number.highhumidity
+  low_limit: input_number.lowhumidity
+
+# RF Processes
+# Front door plateswitch: controlled by HA automation.
+Living PlateSwitch L:
+  module: rfsensors
+  class: PlateSwitch
+  sensor:
+    - entity: binary_sensor.plateswitch2_l
+  entity_item:
+    - entity: switch.lr_couch
+Living PlateSwitch R:
+  module: rfsensors
+  class: PlateSwitch
+  sensor:
+    - entity: binary_sensor.plateswitch2_r
+  entity_item:
+    - entity: switch.lr_ceilingfan
+Den PlateSwitch L:
+  module: rfsensors
+  class: PlateSwitch
+  sensor:
+    - entity: binary_sensor.plateswitch3_l
+  entity_item:
+    - entity: switch.rp_lights
+Den PlateSwitch m:
+  module: rfsensors
+  class: PlateSwitch
+  sensor:
+    - entity: binary_sensor.plateswitch3_m
+  entity_item:
+    - entity: switch.rp_lightslandscape
+Den PlateSwitch R:
+  module: rfsensors
+  class: PlateSwitch
+  sensor:
+    - entity: binary_sensor.plateswitch3_r
+  entity_item:
+    - entity: switch.d_hallfan
+MB PlateSwitch L:
+  module: rfsensors
+  class: PlateSwitch
+  sensor:
+    - entity: binary_sensor.plateswitch4_l
+  entity_item:
+    - entity: switch.mb_smartfan
+MB PlateSwitch M:
+  module: rfsensors
+  class: PlateSwitch
+  sensor:
+    - entity: binary_sensor.plateswitch4_m
+  entity_item:
+    - entity: switch.mb_ceilingfan
+#MB PlateSwitch R: Controlled by HA automation.
+# Master Open Doors:
+#   module: rfsensors
+#   class: WatchDoor
+#   sensor: 
+#     - entity: binary_sensor.mb_backdoor
+#     - entity: binary_sensor.mb_stormdoor
+#   entity_closed: input_boolean.mb_closed
+#   delay: 10
+# Living Open Doors:
+#   module: rfsensors
+#   class: WatchDoor
+#   sensor: 
+#     - entity: binary_sensor.lr_frontdoor
+#     - entity: binary_sensor.lr_stormdoor
+#   entity_closed: input_boolean.living_closed
+#   delay: 10
+# Den Open Doors:
+#   module: rfsensors
+#   class: WatchDoor
+#   sensor: 
+#     - entity: binary_sensor.d_sliding
+#     - entity: binary_sensor.g_bathdoor
+#   entity_closed: input_boolean.den_closed
+#   delay: 10
+
+# Climate Control
+MB AC Night:
+  module: climate
+  class: ACControl
+  sensor: sensor.mb_smartfan_si7021_temperature
+  entity_item: switch.mb_ac
+  temperature: input_number.mbnighttemp
+  start_time: "21:00"
+  end_time: "06:30"
+MB AC Day:
+  module: climate
+  class: ACControl
+  sensor: sensor.mb_smartfan_si7021_temperature
+  entity_item: switch.mb_ac
+  temperature: input_number.mbdaytemp
+  start_time: "09:00"
+  end_time: "16:00"
+MB Fan Night:
+  module: climate
+  class: ACControl
+  sensor: sensor.mb_smartfan_si7021_temperature
+  entity_item: switch.mb_ceilingfan
+  temperature: input_number.mbnightfantemp
+  start_time: "21:00"
+  end_time: "06:30"
+MB Fan Day:
+  module: climate
+  class: ACControl
+  sensor: sensor.mb_smartfan_si7021_temperature
+  entity_item: switch.mb_ceilingfan
+  temperature: input_number.mbdayfantemp
+  start_time: "09:00"
+  end_time: "16:00"
